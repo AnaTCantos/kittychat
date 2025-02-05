@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+</head>
+<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT2SkpQNsO4d8Fj944jkJqAHiZv-oLzbH8GRA&s" alt="Hello Kitty" class="logo">
+
+<body>
+  <div class="form-container">
+    <h2>Iniciar sesión</h2>
+    <form id="login-form">
+      <input type="email" id="email" placeholder="Correo electrónico" required>
+      <input type="password" id="password" placeholder="Contraseña" required>
+      <button type="submit">Iniciar sesión</button>
+    </form>
+    <p>¿No tienes cuenta? <a href="register.html">Regístrate</a></p>
+  </div>
+
+  <script>
+    document.getElementById('login-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+
+      const response = await fetch('http://localhost:3000/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert('Login exitoso');
+        localStorage.setItem('token', data.token); // Guardar el token en el localStorage
+        window.location.href = 'chat.html'; // Redirige al chat
+      } else {
+        alert(data.message); // Muestra el error
+      }
+    });
+  </script>
+  <link rel="stylesheet" href="style.css">
+</body>
+</html>
